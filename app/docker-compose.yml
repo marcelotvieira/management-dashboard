@@ -1,0 +1,37 @@
+version: '3'
+services:
+  backend:
+    container_name: dash_backend
+    build: ./backend
+    ports: 
+      - 3001:3001
+    working_dir: /app-backend
+    volumes:
+      - ./backend/src:/app-backend/src
+    depends_on:
+      - db
+    environment:
+      - APP_PORTS=3001
+      - JWT_SECRET=jsonwebtokensecret
+      - MONGO_USER=root
+      - MONGO_PASSWORD=password
+      - MONGO_DATABASE=management
+      - MONGO_PORT=27017
+      - DATABASE_URL=mongodb://root:password@db:27017/management?authSource=admin
+    tty: true
+    stdin_open: true
+  
+  db:
+    container_name: dash_db
+    build: ./mongo_rs
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: management
+      MONGO_REPLICA_HOST: db
+      MONGO_REPLICA_PORT: 27017
+
+
+      
