@@ -16,6 +16,12 @@ userRoutes.post(
 );
 
 userRoutes.get(
+  '/users/:id/role',
+  asyncHandler((req: Request, res: Response) => userController.getRoleById(req, res)),
+);
+
+
+userRoutes.get(
   '/users/:id',
   asyncHandler((req: Request, res: Response) => userController.getUserById(req, res)),
   errorMiddleware
@@ -26,5 +32,6 @@ userRoutes.get(
   asyncHandler((req: Request, res: Response) => userController.getAllUsers(req, res)),
   errorMiddleware
 );
+
 
 export default userRoutes;

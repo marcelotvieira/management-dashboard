@@ -19,6 +19,11 @@ export class UserController {
     res.status(200).json(user);
   }
 
+  public async getRoleById(req: Request, res: Response) {
+    const role = await this._service.getRoleById(req.params.id);
+    res.status(200).json(role);
+  }
+
   public async getAllUsers(_req: Request, res: Response) {
     const users = await this._service.getAllUsers();
     res.status(200).json(users);

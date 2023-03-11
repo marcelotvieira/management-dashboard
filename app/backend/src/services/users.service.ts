@@ -24,6 +24,15 @@ export class UserService {
     return user;
   }
 
+  public async getRoleById(id: string) {
+    const user = await this.userModel.findFirst({
+      where: { id },
+      select: { role: true }
+    });
+    if (!user) ApiError.notFound('User not found');
+    return user;
+  }
+
   public async getAllUsers() {
     const users = await this.userModel.findMany();
     return users;
