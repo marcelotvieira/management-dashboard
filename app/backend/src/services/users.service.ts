@@ -3,14 +3,15 @@ import { ApiError } from '../ApiError';
 import { prisma } from './prisma';
 
 export class UserService {
+  private userModel = prisma.users;
 
   public async createUser(data: Prisma.UsersCreateInput) {
-    const newUser = await prisma.users.create({ data });
+    const newUser = await this.userModel.create({ data });
     return newUser;
   }
 
   public async getUserById(id: string) {
-    const user = await prisma.users.findFirst({
+    const user = await this.userModel.findFirst({
       where: { id },
       select: {
         id: true,
@@ -24,7 +25,7 @@ export class UserService {
   }
 
   public async getAllUsers() {
-    const users = await prisma.users.findMany();
+    const users = await this.userModel.findMany();
     return users;
   }
 
