@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { errorMiddleware } from './middlewares';
 import userRoutes from './routes/users.routes';
 
 class App {
@@ -14,6 +15,7 @@ class App {
 
   private config(): void {
     this.app.use(express.json());
+    this.app.use(errorMiddleware);
   }
 
   private routes(): void {

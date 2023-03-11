@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import { ApiError } from '../ApiError';
 import { prisma } from './prisma';
 
 export class UserService {
@@ -9,7 +10,7 @@ export class UserService {
   }
 
   public async getUserById(id: string) {
-    const newUser = await prisma.users.findFirst({
+    const user = await prisma.users.findFirst({
       where: { id },
       select: {
         id: true,
@@ -18,7 +19,8 @@ export class UserService {
         email: true,
       }
     });
-    return newUser;
+    if (!user) ApiError.notFound('User not found');
+    return user;
   }
 
   public async getAllUsers() {
