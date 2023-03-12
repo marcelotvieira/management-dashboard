@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { UserController } from '../controllers/users.controller';
 import { UserService } from '../services/users.service';
 import * as asyncHandler from 'express-async-handler';
-import { errorMiddleware, validateUserInput } from '../middlewares';
+import { authenticateToken, errorMiddleware, validateUserInput } from '../middlewares';
 
 const userRoutes = Router();
 const userService = new UserService();
@@ -16,10 +16,17 @@ userRoutes.post(
 );
 
 userRoutes.get(
-  '/users/:id/role',
-  asyncHandler((req: Request, res: Response) => userController.getRoleById(req, res)),
+  '/users/role',
+  asyncHandler(authenticateToken),
+  asyncHandler((req: Request, res: Response) => userController.getRole(req, res)),
+  errorMiddleware,
 );
 
+userRoutes.get(
+  '/users/login',
+  asyncHandler((req: Request, res: Response) => userController.userLogin(req, res)),
+  errorMiddleware,
+);
 
 userRoutes.get(
   '/users/:id',
