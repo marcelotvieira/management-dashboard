@@ -29,8 +29,7 @@ export const authenticateToken = (
   const { authorization } = req.headers;
   if (!authorization) ApiError.badRequest('Unauthorized');
   try {
-    const decoded = jwt.verify(req.headers.authorization as string, 'secretKey' );
-    req.body = decoded;
+    jwt.verify(req.headers.authorization as string, 'secretKey' );
     next();
   } catch (error) {
     ApiError.unauthorized('Unauthorized');
@@ -48,7 +47,7 @@ export const errorMiddleware = (
     return res.status(400).json({ message: error.message });
   }
   console.log(`Error: ${error}`);
-  res.status(400).json({ message: error });
+  res.status(400).json({ type: 'unhandled', message: error.message });
   next();
 };
 

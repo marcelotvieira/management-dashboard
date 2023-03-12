@@ -1,6 +1,8 @@
 import * as express from 'express';
 import { errorMiddleware } from './middlewares';
 import userRoutes from './routes/users.routes';
+import clientRoutes from './routes/clients.routes';
+import projectRoutes from './routes/projects.routes';
 
 class App {
   public app: express.Express;
@@ -11,15 +13,22 @@ class App {
 
     this.config();
     this.routes();
+    this.errorConfig();
+    
   }
 
   private config(): void {
     this.app.use(express.json());
-    this.app.use(errorMiddleware);
   }
 
   private routes(): void {
     this.app.use(userRoutes);
+    this.app.use(clientRoutes);
+    this.app.use(projectRoutes);
+  }
+
+  private errorConfig(): void {
+    this.app.use(errorMiddleware);
   }
 
   public start(PORT: string | number): void {

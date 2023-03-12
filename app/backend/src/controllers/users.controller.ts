@@ -26,7 +26,7 @@ export class UserController {
   }
 
   public async getRole(req: Request, res: Response) {
-    const role = await this._service.getRole(req.body);
+    const role = await this._service.getRole(req.headers.authorization as string);
     res.status(200).json(role);
   }
 

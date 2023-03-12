@@ -25,7 +25,10 @@ export class UserService {
         lastName: true,
         email: true,
         role: true,
-      }
+        projects: true,
+        clients: true,
+      },
+
     });
 
     if (!user) ApiError.notFound('User not found');
@@ -37,7 +40,7 @@ export class UserService {
       where: { email }
     });
     if (!user) return ApiError.notFound('Invalid credentials');
-    if (await bcrypt.compare(password, user.password)) {
+    if (!await bcrypt.compare(password, user.password)) {
       ApiError.badRequest('Invalid credentials');
     }
     const token = this.generateJwt(user);
@@ -55,16 +58,28 @@ export class UserService {
     return { token };
   }
 
-  public async getRole(payload: IUserTokenPayload) {
+  public async getRole(payload: string) {
+    const decodedUser = jwt.verify(payload, 'secretKey') as jwt.JwtPayload;
     const user = await this.userModel.findFirst({
-      where: { id: payload.id },
+      where: { id: decodedUser.id },
       select: { role: true }
     });
     return user;
   }
 
   public async getAllUsers() {
-    const users = await this.userModel.findMany();
+    const users = await this.userModel.findMany({
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        projects: true,
+        clients: true,
+      },
+    
+    });
     return users;
   }
 
