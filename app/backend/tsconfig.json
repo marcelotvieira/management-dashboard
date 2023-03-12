@@ -1,8 +1,5 @@
 {
     "compilerOptions": {
-      "types": [
-        "@types/express-rescue"
-      ],
       "target": "es2019",
       "module": "commonjs",
       "sourceMap": true,                     
@@ -21,4 +18,4 @@
       }
     },
     "include": ["src/**/*"],
-  }
+}
