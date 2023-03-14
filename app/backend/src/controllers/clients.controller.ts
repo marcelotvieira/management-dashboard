@@ -13,8 +13,8 @@ export class ClientController {
     res.status(200).json(newClient);
   }
 
-  public async getAllClients(_req: Request, res: Response) {
-    const users = await this._service.getAllClients();
+  public async getAllClients(req: Request, res: Response) {
+    const users = await this._service.getAllClients(req.headers.authorization as string);
     res.status(200).json(users);
   }
 }

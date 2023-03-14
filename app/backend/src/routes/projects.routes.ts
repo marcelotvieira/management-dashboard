@@ -2,7 +2,7 @@ import { ProjectController } from '../controllers/projects.controller';
 import { ProjectService } from '../services/projects.service';
 import { Request, Response, Router } from 'express';
 import * as asyncHandler from 'express-async-handler';
-import { authenticateToken } from '../middlewares';
+import { authenticateToken, validateProjectInput } from '../middlewares';
 
 
 
@@ -13,6 +13,7 @@ const projectController = new ProjectController(projectService);
 projectRoutes.post(
   '/projects',
   asyncHandler(authenticateToken),
+  asyncHandler(validateProjectInput),
   asyncHandler((req: Request, res: Response) => projectController.createProject(req, res)),
 );
 

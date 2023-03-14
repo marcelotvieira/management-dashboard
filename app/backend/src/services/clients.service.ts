@@ -1,26 +1,21 @@
 import { Request } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { prisma } from './prisma';
 
 export class ClientService {
   private clientModel = prisma.clients;
 
   public async createClient(req: Request) {
-    const currentUser = jwt
-      .verify(req.headers.authorization as string, 'secretKey') as jwt.JwtPayload;
+    const currentUserId = req.headers.authorization;
     const newClient = await this.clientModel.create({ data: {
       ...req.body,
-      userId: currentUser.id,
+      userId: currentUserId,
     }});
     return newClient;
   }
 
-  public async getAllClients() {
+  public async getAllClients(userId: string) {
     const users = await this.clientModel.findMany({
-      include: {
-        user: true,
-        projects: true,
-      }
+      where: { userId }
     });
     return users;
   }

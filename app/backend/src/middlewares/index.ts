@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { userSchema } from '../validations';
+import { projectValidateSchema, userLoginSchema, userSchema } from '../validations';
 import { ApiError } from '../ApiError';
 import * as jwt from 'jsonwebtoken';
 import { prisma } from '../services/prisma';
+
 
 export const validateUserInput = async (
   req: Request,
@@ -11,13 +12,38 @@ export const validateUserInput = async (
 ) => {
   const { error } = userSchema.validate(req.body);
   if (error) ApiError.badRequest(error.details[0].message);
+  
   const emails = await prisma.users.findMany({
     select: { email: true }
   });
-
   if (emails.some((data) => data.email === req.body.email)) {
     ApiError.badRequest('Email already in use');
   }
+  next();
+};
+
+export const validateProjectInput = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const { error } = projectValidateSchema.validate(req.body);
+  if (error) ApiError.badRequest(error.details[0].message);
+  const userClients = await prisma.clients.findMany({
+    where: { userId: req.headers.authorization },
+  });
+  const isValidClient = userClients.some((client) => client.id === req.body.clientId);
+  if (!isValidClient) ApiError.notFound('Client not found');
+  next();
+};
+
+export const validateUserLogin = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const { error } = userLoginSchema.validate(req.body);
+  if (error) ApiError.badRequest(error.details[0].message);
   next();
 };
 
@@ -29,7 +55,8 @@ export const authenticateToken = (
   const { authorization } = req.headers;
   if (!authorization) ApiError.badRequest('Unauthorized');
   try {
-    jwt.verify(req.headers.authorization as string, 'secretKey' );
+    const decoded = jwt.verify(authorization as string, 'secretKey') as jwt.JwtPayload;
+    req.headers.authorization = decoded.id;
     next();
   } catch (error) {
     ApiError.unauthorized('Unauthorized');

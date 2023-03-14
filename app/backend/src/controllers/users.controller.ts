@@ -25,11 +25,6 @@ export class UserController {
     res.status(200).json(user);
   }
 
-  public async getRole(req: Request, res: Response) {
-    const role = await this._service.getRole(req.headers.authorization as string);
-    res.status(200).json(role);
-  }
-
   public async getAllUsers(_req: Request, res: Response) {
     const users = await this._service.getAllUsers();
     res.status(200).json(users);

@@ -28,7 +28,6 @@ export class UserService {
         projects: true,
         clients: true,
       },
-
     });
 
     if (!user) ApiError.notFound('User not found');
@@ -58,15 +57,6 @@ export class UserService {
     return { token };
   }
 
-  public async getRole(payload: string) {
-    const decodedUser = jwt.verify(payload, 'secretKey') as jwt.JwtPayload;
-    const user = await this.userModel.findFirst({
-      where: { id: decodedUser.id },
-      select: { role: true }
-    });
-    return user;
-  }
-
   public async getAllUsers() {
     const users = await this.userModel.findMany({
       select: {
@@ -78,7 +68,6 @@ export class UserService {
         projects: true,
         clients: true,
       },
-    
     });
     return users;
   }

@@ -5,17 +5,13 @@ export class ProjectService {
   private projectModel = prisma.projects;
 
   public async createProject(data: Prisma.ProjectsCreateInput) {
-    console.log('PROJECT SERVICE');
     const newProject = await this.projectModel.create({ data });
     return newProject;
   }
 
-  public async getAllProjects() {
+  public async getAllProjects(userId: string) {
     const users = await this.projectModel.findMany({
-      include: {
-        user: true,
-        client: true,
-      },
+      where: { userId }
     });
     return users;
   }
