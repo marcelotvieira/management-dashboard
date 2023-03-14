@@ -9,25 +9,25 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 userRoutes.post(
-  '/users/register',
+  '/user/register',
   asyncHandler(validateUserInput),
   asyncHandler((req: Request, res: Response) => userController.createUser(req, res)),
 );
 
 userRoutes.get(
-  '/users/login',
+  '/user/login',
   asyncHandler(validateUserLogin),
   asyncHandler((req: Request, res: Response) => userController.userLogin(req, res)),
 );
 
 userRoutes.get(
-  '/users/:id',
+  '/user',
   asyncHandler(authenticateToken),
-  asyncHandler((req: Request, res: Response) => userController.getUserById(req, res)),
+  asyncHandler((req: Request, res: Response) => userController.getUser(req, res)),
 );
 
 userRoutes.get(
-  '/users',
+  '/user',
   asyncHandler(authenticateToken),
   asyncHandler((req: Request, res: Response) => userController.getAllUsers(req, res)),
 );

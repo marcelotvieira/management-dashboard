@@ -20,8 +20,8 @@ export class UserController {
     res.status(200).json(user);
   }
 
-  public async getUserById(req: Request, res: Response) {
-    const user = await this._service.getUserById(req.params.id);
+  public async getUser(req: Request, res: Response) {
+    const user = await this._service.getUser(req.headers.authorization as string);
     res.status(200).json(user);
   }
 

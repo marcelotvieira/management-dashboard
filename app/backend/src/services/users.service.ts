@@ -16,7 +16,7 @@ export class UserService {
     return newUser;
   }
 
-  public async getUserById(id: string) {
+  public async getUser(id: string) {
     const user = await this.userModel.findFirst({
       where: { id },
       select: {
@@ -29,15 +29,27 @@ export class UserService {
         clients: true,
       },
     });
-
     if (!user) ApiError.notFound('User not found');
     return user;
   }
 
-  public async userLogin(email: string, password: string) {
-    const user = await this.userModel.findFirst({
-      where: { email }
+  public async getAllUsers() {
+    const users = await this.userModel.findMany({
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        projects: true,
+        clients: true,
+      },
     });
+    return users;
+  }
+
+  public async userLogin(email: string, password: string) {
+    const user = await this.userModel.findFirst({ where: { email }});
     if (!user) return ApiError.notFound('Invalid credentials');
     if (!await bcrypt.compare(password, user.password)) {
       ApiError.badRequest('Invalid credentials');
@@ -56,20 +68,4 @@ export class UserService {
     const token = jwt.sign(user, 'secretKey');
     return { token };
   }
-
-  public async getAllUsers() {
-    const users = await this.userModel.findMany({
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-        projects: true,
-        clients: true,
-      },
-    });
-    return users;
-  }
-
 }
