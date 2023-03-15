@@ -14,7 +14,7 @@ userRoutes.post(
   asyncHandler((req: Request, res: Response) => userController.createUser(req, res)),
 );
 
-userRoutes.get(
+userRoutes.post(
   '/user/login',
   asyncHandler(validateUserLogin),
   asyncHandler((req: Request, res: Response) => userController.userLogin(req, res)),

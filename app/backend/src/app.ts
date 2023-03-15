@@ -10,15 +10,15 @@ class App {
 
   constructor() {
     this.app = express();
-    this.app.get('/', (_req, res) => res.json({ message: 'ok' }));
     this.config();
+    this.app.get('/', (_req, res) => res.json({ message: 'ok' }));
     this.routes();
     this.errorConfig();
   }
 
   private config(): void {
-    this.app.use(express.json());
     this.app.use(cors());
+    this.app.use(express.json());
   }
 
   private routes(): void {

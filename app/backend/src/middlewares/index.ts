@@ -53,7 +53,7 @@ export const authenticateToken = (
   next: NextFunction,
 ) => {
   const { authorization } = req.headers;
-  if (!authorization) ApiError.badRequest('Unauthorized');
+  if (!authorization) ApiError.unauthorized('Unauthorized');
   try {
     const decoded = jwt.verify(authorization as string, 'secretKey') as jwt.JwtPayload;
     req.headers.authorization = decoded.id;
