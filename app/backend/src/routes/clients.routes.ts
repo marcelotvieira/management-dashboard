@@ -21,4 +21,9 @@ clientRoutes.get(
   asyncHandler((req: Request, res: Response) => clientController.getAllClients(req, res)),
 );
 
+clientRoutes.post(
+  '/clients/:id',
+  asyncHandler((req: Request, res: Response) => clientController.updateClientById(req, res))
+);
+
 export default clientRoutes;

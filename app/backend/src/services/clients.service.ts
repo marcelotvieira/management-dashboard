@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { Request } from 'express';
 import { prisma } from './prisma';
 
@@ -18,5 +19,17 @@ export class ClientService {
       where: { userId }
     });
     return users;
+  }
+
+  public async updateClientById(id: string, payload: Prisma.ClientsUpdateInput ) {
+    const updated = await this.clientModel.update({
+      where: { id },
+      data: {
+        ...payload,
+      }
+    },
+    );
+    console.log(updated);
+    return updated;
   }
 }

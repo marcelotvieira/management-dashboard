@@ -17,4 +17,11 @@ export class ClientController {
     const users = await this._service.getAllClients(req.headers.authorization as string);
     res.status(200).json(users);
   }
+
+  public async updateClientById(req: Request, res: Response) {
+    const { id } = req.params;
+    const payload = req.body;
+    const response = await this._service.updateClientById(id, payload);
+    res.status(200).json(response);
+  }
 }
