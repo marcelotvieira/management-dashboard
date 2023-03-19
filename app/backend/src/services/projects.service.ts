@@ -11,7 +11,11 @@ export class ProjectService {
 
   public async getAllProjects(userId: string) {
     const users = await this.projectModel.findMany({
-      where: { userId }
+      where: { userId },
+      include: {
+        client: true,
+        tasks: true,
+      }
     });
     return users;
   }

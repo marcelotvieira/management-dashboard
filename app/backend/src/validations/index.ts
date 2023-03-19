@@ -16,6 +16,7 @@ export const userLoginSchema = Joi.object({
 export const projectValidateSchema = Joi.object({
   name: Joi.string().required(),
   clientId: Joi.string().required(),
+  status: Joi.string(),
   initialDate: Joi.string().required(),
   endDate: Joi.string().required(),
   expectedEndDate: Joi.string().required(),

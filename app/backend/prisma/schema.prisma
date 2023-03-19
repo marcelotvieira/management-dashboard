@@ -25,10 +25,13 @@ model Users {
 model Clients {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  userId       String  @db.ObjectId
-  firstContact DateTime
-  lastContact  DateTime
+  userId       String     @db.ObjectId
+  firstContact DateTime   @default(now())
+  lastContact  DateTime   @default(now())
+  capturedBy   String     @default("")
   companyName  String     @default("")
+  contact      String     @default("")
+  email        String     @default("")
   projects     Projects[] @relation("clientProjects")
   user         Users      @relation("userClients", fields: [userId], references: [id])
 }
@@ -42,6 +45,7 @@ model Projects {
   endDate         DateTime
   expectedEndDate DateTime
   ofertedValue    Int
+  status          String   @default("negociando")
   value           Int      @default(0)
   capturedBy      String
   category        String   @default("")
