@@ -18,4 +18,16 @@ export class ProjectController {
     const users = await this._service.getAllProjects(req.headers.authorization as string);
     res.status(200).json(users);
   }
+
+  public async updateProjectById(req: Request, res: Response) {
+    const { id } = req.params;
+    const response = await this._service.updateProjectById(id, req.body);
+    res.status(200).json(response);
+  }
+
+  public async deleteProjectById(req: Request, res: Response) {
+    const { id } = req.params;
+    const response = await this._service.deleteProjectById(id);
+    res.status(200).json({ message: 'Deleted', data: {...response } });
+  }
 }

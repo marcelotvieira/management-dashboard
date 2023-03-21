@@ -44,10 +44,10 @@ model Projects {
   initialDate     DateTime
   endDate         DateTime
   expectedEndDate DateTime
-  ofertedValue    Int
+  ofertedValue    Int      @default(0)
   status          String   @default("negociando")
   value           Int      @default(0)
-  capturedBy      String
+  capturedBy      String   @default("")
   category        String   @default("")
   tags            String[] @default([])
   tasks           Tasks[]  @relation("taskProjects")

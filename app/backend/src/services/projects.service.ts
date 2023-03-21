@@ -26,4 +26,24 @@ export class ProjectService {
     });
     return users;
   }
+
+  public async updateProjectById(id: string, payload: Prisma.ProjectsUpdateInput ) {
+    const updated = await this.projectModel.update({
+      where: { id },
+      data: {
+        ...payload,
+      }
+    });
+    console.log(updated);
+    return updated;
+  }
+
+  public async deleteProjectById(id: string) {
+    const deleted = await this.projectModel.delete({
+      where: { id },
+    });
+    console.log(deleted);
+    return deleted;
+  }
+
 }

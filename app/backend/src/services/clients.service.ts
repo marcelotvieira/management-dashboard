@@ -32,4 +32,12 @@ export class ClientService {
     console.log(updated);
     return updated;
   }
+
+  public async deleteClientById(id: string) {
+    const deleted = await this.clientModel.delete({
+      where: { id },
+    });
+    console.log(deleted);
+    return deleted;
+  }
 }

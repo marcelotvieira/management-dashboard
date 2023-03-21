@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
-import { projectValidateSchema, userLoginSchema, userSchema } from '../validations';
+import { clientValidateSchema, projectValidateSchema, userLoginSchema, userSchema } from '../validations';
 import { ApiError } from '../ApiError';
 import * as jwt from 'jsonwebtoken';
 import { prisma } from '../services/prisma';
+import { Prisma } from '@prisma/client';
 
 
 export const validateUserInput = async (
@@ -34,6 +35,16 @@ export const validateProjectInput = async (
   });
   const isValidClient = userClients.some((client) => client.id === req.body.clientId);
   if (!isValidClient) ApiError.notFound('Client not found');
+  next();
+};
+
+export const validateClientInput = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const { error } = clientValidateSchema.validate(req.body);
+  if (error) ApiError.badRequest(error.details[0].message);
   next();
 };
 
@@ -74,7 +85,8 @@ export const errorMiddleware = (
     return res.status(400).json({ message: error.message });
   }
   console.log(`Error: ${error}`);
-  res.status(400).json({ type: 'unhandled', message: error.message });
+  const prismaError = error as Prisma.PrismaClientKnownRequestError;
+  res.status(400).json({ type: 'unhandled', message: prismaError.meta });
   next();
 };
 

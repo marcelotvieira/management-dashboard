@@ -20,11 +20,20 @@ export const projectValidateSchema = Joi.object({
   initialDate: Joi.string().required(),
   endDate: Joi.string().required(),
   expectedEndDate: Joi.string().required(),
-  ofertedValue: Joi.number().required(),
+  ofertedValue: Joi.number(),
   value: Joi.number(),
-  capturedBy: Joi.string().required(),
+  capturedBy: Joi.string(),
   category: Joi.string(),
   tags: Joi.array(),
   tasks: Joi.array(),
+});
+
+
+export const clientValidateSchema = Joi.object({
+  name: Joi.string().required(),
+  companyName: Joi.string(),
+  capturedBy: Joi.string(),
+  contact: Joi.number(),
+  email: Joi.string(),
 });
 

@@ -20,8 +20,13 @@ export class ClientController {
 
   public async updateClientById(req: Request, res: Response) {
     const { id } = req.params;
-    const payload = req.body;
-    const response = await this._service.updateClientById(id, payload);
+    const response = await this._service.updateClientById(id, req.body);
     res.status(200).json(response);
+  }
+
+  public async deleteClientById(req: Request, res: Response) {
+    const { id } = req.params;
+    const response = await this._service.deleteClientById(id);
+    res.status(200).json({ message: 'Deleted', data: {...response } });
   }
 }

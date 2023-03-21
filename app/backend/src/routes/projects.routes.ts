@@ -24,4 +24,16 @@ projectRoutes.get(
 
 );
 
+projectRoutes.post(
+  '/projects/:id',
+  asyncHandler(authenticateToken),
+  asyncHandler(validateProjectInput),
+  asyncHandler((req: Request, res: Response) => projectController.updateProjectById(req, res))
+);
+
+projectRoutes.delete(
+  '/projects/:id',
+  asyncHandler(authenticateToken),
+  asyncHandler((req: Request, res: Response) => projectController.deleteProjectById(req, res))
+);
 export default projectRoutes;
