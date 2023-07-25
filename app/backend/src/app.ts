@@ -1,16 +1,39 @@
 import * as express from 'express';
+import { errorMiddleware } from './middlewares';
+import userRoutes from './routes/users.routes';
+import clientRoutes from './routes/clients.routes';
+import projectRoutes from './routes/projects.routes';
+import * as cors from 'cors';
 
 class App {
-    public app: express.Express;
+  public app: express.Express;
 
-    constructor() {
-        this.app = express();
-        this.app.get('/', (_req, res) => res.json({ message: 'ok' }));
-    }
+  constructor() {
+    this.app = express();
+    this.config();
+    this.app.get('/', (_req, res) => res.json({ message: 'ok' }));
+    this.routes();
+    this.errorConfig();
+  }
 
-    public start(PORT: string | number): void {
-        this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
-    }
+  private config(): void {
+    this.app.use(cors());
+    this.app.use(express.json());
+  }
+
+  private routes(): void {
+    this.app.use(userRoutes);
+    this.app.use(clientRoutes);
+    this.app.use(projectRoutes);
+  }
+
+  private errorConfig(): void {
+    this.app.use(errorMiddleware);
+  }
+
+  public start(PORT: string | number): void {
+    this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+  }
 }
 
 export default App;

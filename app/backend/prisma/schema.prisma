@@ -11,9 +11,57 @@ datasource db {
 }
 
 model Users {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  role      String     @default("user")
   firstName String
   lastName  String
   password  String
-  email     String
+  email     String     @unique
+  clients   Clients[]  @relation("userClients")
+  projects  Projects[] @relation("userProjects")
+  tasks     Tasks[]    @relation("userTasks")
+}
+
+model Clients {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  userId       String     @db.ObjectId
+  firstContact DateTime   @default(now())
+  lastContact  DateTime   @default(now())
+  capturedBy   String     @default("")
+  companyName  String     @default("")
+  contact      String     @default("")
+  email        String     @default("")
+  projects     Projects[] @relation("clientProjects")
+  user         Users      @relation("userClients", fields: [userId], references: [id])
+}
+
+model Projects {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  userId          String   @db.ObjectId
+  clientId        String   @db.ObjectId
+  initialDate     DateTime
+  endDate         DateTime
+  expectedEndDate DateTime
+  ofertedValue    Int      @default(0)
+  status          String   @default("negociando")
+  value           Int      @default(0)
+  capturedBy      String   @default("")
+  category        String   @default("")
+  tags            String[] @default([])
+  tasks           Tasks[]  @relation("taskProjects")
+  user            Users    @relation("userProjects", fields: [userId], references: [id])
+  client          Clients  @relation("clientProjects", fields: [clientId], references: [id])
+}
+
+model Tasks {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  userId      String   @db.ObjectId
+  projectId   String   @db.ObjectId
+  description String
+  category    String   @default("")
+  user        Users    @relation("userTasks", fields: [userId], references: [id])
+  project     Projects @relation("taskProjects", fields: [projectId], references: [id])
 }
